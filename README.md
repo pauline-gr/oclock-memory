@@ -159,14 +159,16 @@ Le MCD permet de passer de simples phrases logiques à une conception optimisée
 
 Voici les phrases logiques originales que l’on peut lire en regardant ce schéma :
 
-> Un joueur enregistre un score avec une ou plusieurs difficultés sur un
-> ou plusieurs thèmes.   Un thème peut être utilisé par un ou plusieurs
+> Un joueur joue une ou plusieurs parties avec une ou plusieurs difficultés sur un
+> ou plusieurs thèmes.
+> 
+> Un thème peut être utilisé par un ou plusieurs
 > joueurs sur une ou plusieurs difficultés.
 > 
 > Une difficulté peut être sélectionnée par un ou plusieurs joueurs sur
 > un ou plusieurs thèmes
 > 
-> Pour une partie enregistrée comporte ces trois paramètres et pour
+> Une partie enregistrée comporte ces trois paramètres et pour
 > chaque partie on a une date, un score et un temps final.
 
 Ces phrases répondant correctement à notre projet, on peut créer la base.
