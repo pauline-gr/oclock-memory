@@ -31,8 +31,6 @@ Le projet docker est composé de quatre conteneurs :
 
 # Installation du projet
 
-The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
-
 ## Pré-requis
 
 Si Docker n’est pas installé sur votre poste :
