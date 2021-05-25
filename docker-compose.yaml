@@ -1,0 +1,82 @@
+version: '3'
+
+volumes:
+  database:
+
+services:
+  # Conteneur PHP nommé php qui représentera le conteneur web applicatif
+  php:
+    # Description du conteneur dans le build
+    build: ./www/memory
+    # On utilise le port 80 qui est le port de base lorsqu'on accède à localhost
+    ports:
+      - 80:80
+    # Les volumes représentent les éléments locaux qui vont être transmis sur le serveur et persistés après clôture des conteneurs
+    volumes:
+      - "./composants_docker/php/php.ini:/usr/local/etc/php/conf.d/app.ini:ro"
+      - "./composants_docker/php/php_server/symfony_apache_conf.conf:/etc/apache2/sites-enabled/000-default.conf"
+      - "./www/memory:/var/www/html"
+      - /var/www/html/node_modules
+    # Les dépendances spécifient que le conteneur php ne fonctionnera que le conteneur api est ok
+    depends_on:
+      - api
+    # Le working dir spécifie l'emplacement du projet web
+    working_dir: "/var/www/html"
+  
+  # Conteneur PHP nommé api qui représentera le conteneur api
+  api:
+    # On utilise la même configuration que pour le conteneur php, on aurait pu en définir une différente
+    build: ./www/api
+    # On utilise le port 81 pour appeler l'API
+    ports:
+      - 81:80
+    volumes:
+      - "./composants_docker/php/php.ini:/usr/local/etc/php/conf.d/app.ini:ro"
+      - "./composants_docker/php/php_server/symfony_apache_conf.conf:/etc/apache2/sites-enabled/000-default.conf"
+      - "./www/api:/var/www/html"
+      - /var/www/html/node_modules
+    # Le working dir spécifie l'emplacement de l'api
+    depends_on:
+      - db
+    working_dir: "/var/www/html"
+
+  # Conteneur MySQL nommé db (database)
+  db:
+    # Image de mysql
+    image: mysql
+    # Redémarrage du service en cas de crash
+    restart: on-failure
+    # Définition de l'environnement
+    environment:
+      # Nom de la base de données
+      MYSQL_DATABASE: 'oclock_memory'
+      # Utilisateur de la base de données
+      MYSQL_USER: 'oclock_user'
+      # Mot de passe de la base de données
+      MYSQL_PASSWORD: '4d8cac9c31795706cf3b547d2fb4449a'
+      # Mot de passe root
+      MYSQL_ROOT_PASSWORD: '4d8cac9c31795706cf3b547d2fb4449a'
+    # Définition des ports
+    ports:
+      # Définition des ports, on conserve le port original alloué aux bdd 3306
+      - '3306:3306'
+    expose:
+      # On ouvre le port 3306 pour que les autres conteneurs puissent y accéder
+      - '3306'
+    volumes:
+      - "./composants_docker/mysqld_charset.cnf:/etc/mysql/conf.d/mysqld_charset.cnf"
+      - database:/var/lib/mysql
+      - "./initdb:/docker-entrypoint-initdb.d"
+
+  # Conteneur PhpMyAdmin nommé phpmyadmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db
+    # Accès à phpmyadmin sur localhost:8181
+    ports:
+      - 8181:80
+    # Définition de l'environnement phpmyadmin
+    environment:
+      MYSQL_USERNAME: 'oclock_user'
+      MYSQL_ROOT_PASSWORD: '4d8cac9c31795706cf3b547d2fb4449a'

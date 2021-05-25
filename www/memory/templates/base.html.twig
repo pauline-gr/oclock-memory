@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="Jeu Memory">
+        <meta name="keywords" content="O'Clock, Memory">
+        <meta name="author" content="Pauline Grange">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {# Note: Symfony récupère automatiquement la favicon.ico à la racine de Public #}
+        
+        {# Note: Bloc de titre qu'on va suffixer sur les autres templates #}
+        <title>{% block title %}Memory - {% endblock %}</title>
+
+        {# Le bloc stylesheets va recenser tous les styles #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        
+        {# Le bloc stylesheets va recenser tout le js #}
+        {% block scripts %}
+            {{ encore_entry_script_tags('app') }}
+            {{ encore_entry_script_tags('meilleurs_scores')}}
+        {% endblock %}
+    </head>
+    <body>
+        {# Le bloc header affiche les infos joueur #}
+        {% block header %}
+        {% endblock %}
+        
+        {# Le bloc body affiche le contenu principal #}
+        <div class="container">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

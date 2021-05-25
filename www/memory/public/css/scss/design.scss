@@ -1,0 +1,157 @@
+// Texture de fond utilisée sur le plateau et la section infos joueur
+$texture: 'style_images/noise.png';
+// gradient marron
+$gradient_bois: linear-gradient(0deg, rgba(70,61,52,1) 0%, rgba(106,78,49,1) 100%);
+
+// Tailles d'écran
+$small: 300px;
+$medium: 600px;
+$large: 1000px;
+$xlarge: 1500px;
+
+.header-section {
+	background: $gradient_bois;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+	@media screen and (max-width: $medium) {
+    	width: 100%;
+	}
+	@media screen and (min-width: $medium){
+    	width: 50%;
+	}
+	text-align: center;
+
+	img {
+		float:left;
+	}
+	.current_score {
+		color:yellow;
+		float: right;
+	}
+	.partie-en-cours {
+		background: #3e3226 url($texture);
+		border-radius: 20px;
+	}
+}
+.content-flex-center {
+	display: flex;
+	align-items: center;
+  	justify-content: center;
+	flex-direction: column;
+	line-height: 10px;
+}
+
+body {
+	background: rgb(126, 123, 121);
+
+	.login-content {
+		top: 2vh;
+		margin-bottom: 5vh;
+	}
+	.container{
+		max-width: 100%!important;
+	}
+	.modal-body {
+		/* Masquer les radio buttons et les encadrer */
+		[type=radio] { 
+			position: absolute;
+			opacity: 0;
+			// La définition des dimensions devrait être à 0 mais pour afficher le message d'erreur du required il faut qu'il ait au moins un pixel w et h
+			width: 1px;
+			height: 1px;
+		}
+		
+		[type=radio] + img {
+			cursor: pointer;
+		}
+		
+		[type=radio]:checked + img {
+			outline: 2px solid #03bf00;
+		}
+	}
+
+	.plateau {	
+		border: 10px solid;
+		border-image-slice: 1;
+		border-width: 10px;
+		border-image-source: $gradient_bois;
+		min-height: 80vh;
+		max-width: 100vw;
+		margin-bottom: 5vh;
+		background: #074d1e url($texture);
+		// Allignement flex des cartes
+        display: flex;
+        flex-wrap: wrap;
+		align-content: center;
+		justify-content: center;
+
+		// Taille des cartes selon la taille d'écran
+		.memory_card {
+			@media screen and (max-width: $small) {
+				width: 23vw;
+			}
+			@media screen and (min-width: $small) and (max-width: $medium){
+				width: 16vw;
+			}
+			@media screen and (min-width: $medium) and (max-width: $large) {
+				width: 10vw;
+			}
+			@media screen and (min-width: $large) and (max-width: $xlarge) {
+				width: 8vw;
+			}
+			@media screen and (min-width: $xlarge) {
+				width: 7vw;
+			}
+		}
+		.section-card {
+			padding: 5px;
+		}
+		
+		.scene {
+			// Définition de la perspective dans la section supérieure pour l'effet de rotation 3d
+			perspective: 600px;
+			.card {
+				border: none!important;
+				transition: transform 1s;
+				transform-style: preserve-3d;
+				cursor: pointer;
+				position: relative;
+			}
+			.found {
+				// Masquage de la carte mais en la laissant pour éviter qu'elle ne déplace les autres
+				background: transparent;
+				opacity: 0;
+			}
+			.card.is-flipped {
+				// Effet de retournement de la carte
+				transform: rotateY(180deg);
+			}
+			.card__face {
+				width: 100%;
+				height: 100%;
+				// Masquage de la face cachée
+				-webkit-backface-visibility: hidden;
+				backface-visibility: hidden;
+			}
+			.card__face--back {
+				display: none;
+				transform: rotateY(180deg);
+			}
+		}
+	}
+
+	#progressbar {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		left: 0;
+		background: rgb(255,0,0);
+		background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(249,150,0,1) 50%, rgba(0,255,12,1) 100%);
+		#barre {
+			width: 100%;
+			height: 30px;
+			background-color: rgb(72, 62, 165);
+		}
+	  }
+}

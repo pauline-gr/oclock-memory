@@ -1,0 +1,95 @@
+{# On part du template base #}
+{% extends 'base.html.twig' %}
+
+{# On suffixe le titre global par le titre de la page #}
+{% block title %}{{ parent() }}Jeu{% endblock %}
+
+{# Dans le bloc stylesheets on récupère le bloc parent (base.html.twig) et on lui ajoute le css souhaité #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('design') }}
+    {{ encore_entry_link_tags('card_flip') }}
+{% endblock %}
+
+{# Dans le bloc scripts on récupère le bloc parent (base.html.twig) et on lui ajoute le js souhaité #}
+{% block scripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('card_flip') }}
+{% endblock %}
+
+{# On déclare le bloc header sans parent parce qu'il ne contient rien dans base.html.twig #}
+{% block header %}
+    <div class="container header-section">
+        <div class="row">
+            <div id="div_joueur" class="col-2 content-flex-center" data-joueur-id="{{joueur.id_joueur}}">
+                <img class="avatar" src="images/avatars/{{joueur.avatar_joueur}}"><br/>{{joueur.pseudo_joueur}} 
+            </div>
+            <div class="col-7">
+                Partie en cours<br/>
+                <div id="div_partie_infos" class="partie-en-cours" data-difficulte="{{difficulte.id_difficulte}}" data-theme="{{theme.id_theme}}">
+                    {{difficulte.nom_difficulte}} - {{theme.nom_theme}}<br/>
+                    {# Comme une durée de partie ne dépassera jamais 1h, on découpe le time via la fonction twig slice 
+                            à partir de la 3e colonne (:) sur 5 caractères - Par exemple pour 00:12:34 on obtient 13:34 #}
+                    Temps restant : <i id="temps_partie" data-temps="{{difficulte.temps_difficulte}}">{{ difficulte.temps_difficulte|slice(3, 5) }}</i><br/>
+                </div>
+            </div>
+            <div class="col-3">
+                {# default déclare une valeur par défaut si la valeur est null #}
+                Record: <i id="max_score">{{ joueur.max_score|default('0') }}</i><br/>
+                Score: <i id="current_score">0</i>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    {# Déclaration de la modale de fin de partie #}
+    <div class="modal fade" id="fin_de_partie" tabindex="-1" role="dialog" aria-labelledby="fin_de_partie_titre" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fin_de_partie_titre">Fin de la partie!</h5>
+            </div>
+            <div class="modal-body">
+                <div id="message_fin_partie"></div>
+                <div id="meilleurs_scores"></div>
+                {# Les éléments meilleurs_scores_titres et meilleurs_scores_content seront remplis dynamiquement en js #}
+                <table class="table table-striped">
+                    <thead>
+                        <tr id="meilleurs_scores_titres">
+                        </tr>
+                    </thead>
+                    <tbody id="meilleurs_scores_content">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                {# Le bouton de retour à l'accueil est exécuté en js #}
+                <button id="retour_accueil" type="button" class="btn btn-primary">Retour à l'accueil</button>
+            </div>
+            </div>
+        </div>
+    </div>    
+
+    <div class="plateau">
+        {# Pour chaque carte qu'on a récupéré dans notre liste #}
+        {% for carte in liste_cartes %}
+        <div class="section-card">
+            <div class="scene scene--card">
+                {# On l'inclut dans une balise card en mettant son nom dans data-card qui servira à trouver les paires #}
+                <div class="card" data-card="{{carte}}">
+                    {# Le paramètre draggable="false" permet d'éviter d'avoir des déplacements visuels des cartes quand on clique sur l'image #}
+                    <div class="card__face card__face--front"><img class="memory_card" src="images/cards/dos.png" draggable="false"></div>
+                    {# On récupère les cartes dans le dossier du thème passé en minuscule (lower) #}
+                    <div class="card__face card__face--back"><img class="memory_card" src="images/cards/{{ theme.nom_theme|lower }}/{{carte}}" draggable="false"></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {# Déclaration de la progressbar qui sera gérée dans le js #}
+    <div id="progressbar">
+        <div id="barre"></div>
+    </div>
+{% endblock %}

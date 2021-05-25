@@ -1,0 +1,85 @@
+{# On part du template base #}
+{% extends 'base.html.twig' %}
+
+{# On suffixe le titre global par le titre de la page #}
+{% block title %}{{ parent() }}Login{% endblock %}
+{# Dans le bloc stylesheets on récupère le bloc parent (base.html.twig) et on lui ajoute le css souhaité #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('design') }}
+{% endblock %}
+
+{# Dans le bloc scripts on récupère le bloc parent (base.html.twig) et on lui ajoute le js souhaité #}
+{% block scripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('login') }}
+{% endblock %}
+
+{# On récupère le bloc body pour y inclure notre contenu #}
+{% block body %}
+
+    {# Définition de la fausse modale qui sert de conteneur sur l'interface de login #}
+    <div class="modal-content login-content">
+        <form id="login_form" action="/memory" method="POST">
+            <div class="modal-header">
+                <h5 class="modal-title">Joueur</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="avatar_pick">Avatar</label><br/>
+
+                    {# Pour chaque avatar récupéré depuis la liste transmise par le controlleur on affiche un radio bouton masqué (voir css) #}
+                    {% for item in liste_avatars %}
+                        <label>
+                            <input type="radio" id="avatar_pick" name="avatar_pick" value="{{item}}" required>
+                            <img class="avatar" src="images/avatars/{{item}}">
+                        </label>
+                    {% endfor %}
+                    </label>
+                </div><br/>
+                <div class="form-group">
+                    <label for="pseudo_pick">Pseudo</label>
+                    <input type="text" class="form-control" name="pseudo_pick" id="pseudo_pick" aria-describedby="pseudoHelp" placeholder="Entre un pseudo" required>
+                    <small id="pseudoHelp" class="form-text text-muted">L'utilisation d'un pseudo existant modifiera l'entrée précédente</small>
+                </div>
+                <div class="form-group">
+                    <label for="difficulte_pick">Difficulté</label>
+                    <select class="form-control" name="difficulte_pick" id="difficulte_pick" aria-describedby="difficulteHelp">
+                        {# Pour chaque difficulté recensée dans le controlleur on affiche sa valeur dans un select #}
+                        {% for difficulte in difficultes %}
+                            <option value="{{difficulte.id_difficulte}}">{{difficulte.nom_difficulte}}</option>
+                        {% endfor %}
+                    </select>
+                    <small id="difficulteHelp" class="form-text text-muted">Difficulté de la partie</small>
+                </div>
+                <div class="form-group">
+                    <label for="theme_pick">Thème</label>
+                    <select class="form-control" name="theme_pick" id="theme_pick" aria-describedby="themeHelp">
+                        {# Pour chaque thème recensée dans le controlleur on affiche sa valeur dans un select #}
+                        {% for theme in themes %}
+                            <option value="{{theme.id_theme}}">{{theme.nom_theme}}</option>
+                        {% endfor %}
+                    </select>
+                    <small id="themeHelp" class="form-text text-muted">Thème de la partie</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                {# Le bouton en type submit soumet le formulaire sur son action #}
+                <button id="save_user" type="submit" class="btn btn-success">C'est parti!</button>
+            </div>
+        </form>
+        
+        {# La récupération et l'affichage des meilleurs scores se fait en js dans meilleurs_scores.js #}
+        <div class="modal-header">
+            <h5 class="modal-title">Meilleurs scores</h5>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr id="meilleurs_scores_titres">
+                </tr>
+            </thead>
+            <tbody id="meilleurs_scores_content">
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
