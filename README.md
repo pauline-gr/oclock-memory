@@ -151,13 +151,6 @@ La liste des requêtes utilisées se situe dans le modèle api/src/Service/PDODa
 Le fichier est exécuté par Docker lors de son build, uniquement si la base n’existe pas déjà.
 
 Il existe quatre tables dans le projet qui sont conçues sur le schéma suivant :
-![enter image description here](https://zupimages.net/up/21/21/jz47.png)
-
-Ce schéma est un MCD (Modèle Conceptuel de Données) basé sur la méthode française Merise 2 [https://fr.wikipedia.org/wiki/Merise_(informatique)](https://fr.wikipedia.org/wiki/Merise_(informatique))
-
-Le MCD permet de passer de simples phrases logiques à une conception optimisée en respectant les propriétés ACID ([https://fr.wikipedia.org/wiki/Propri%C3%A9t%C3%A9s_ACID](https://fr.wikipedia.org/wiki/Propri%C3%A9t%C3%A9s_ACID))
-
-Voici les phrases logiques originales que l’on peut lire en regardant ce schéma :
 
 > Un joueur joue une ou plusieurs parties avec une ou plusieurs difficultés sur un
 > ou plusieurs thèmes.
